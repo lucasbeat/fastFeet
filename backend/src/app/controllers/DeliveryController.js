@@ -5,6 +5,9 @@ import File from '../models/File';
 import Recipient from '../models/Recipient';
 import Deliveryman from '../models/Deliveryman';
 
+import Queue from '../../lib/Queue';
+import NewDeliveryMail from '../jobs/NewDeliveryMail';
+
 class DeliveryController {
   async index(req, res) {
     const deliveries = await Delivery.findAll({
@@ -67,6 +70,12 @@ class DeliveryController {
       product,
       recipient_id,
       deliveryman_id,
+    });
+
+    await Queue.add(NewDeliveryMail.key, {
+      deliveryman,
+      recipient,
+      product,
     });
 
     return res.json(delivery);

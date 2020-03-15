@@ -111,7 +111,7 @@ class DeliverymanController {
 
     await Deliveryman.destroy({ where: { id } });
 
-    return res.json();
+    return res.json({});
   }
 }
 
