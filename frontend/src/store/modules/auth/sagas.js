@@ -6,20 +6,22 @@ import api from '~/services/api';
 import { signInSucces } from './actions';
 
 export function* signIn({ payload }) {
-  const { email, password } = payload;
+  try {
+    const { email, password } = payload;
 
-  const response = yield call(api.post, 'sessions', {
-    email,
-    password,
-  });
+    const response = yield call(api.post, 'sessions', {
+      email,
+      password,
+    });
 
-  const { token, user } = response.data;
+    const { token, user } = response.data;
 
-  yield put(signInSucces(token, user));
+    yield put(signInSucces(token, user));
 
-  history.push('/deliveries');
-
-  console.tron.log(response);
+    history.push('/deliveries');
+  } catch (err) {
+    console.tron.log(err);
+  }
 }
 
 export default all([takeLatest('@auth/SIGN_IN_REQUEST', signIn)]);
